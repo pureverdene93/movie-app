@@ -34,17 +34,18 @@ export const Header = () => {
     setMovieGenre(jsonData.genres);
     setGenreId(movieGenre.id);
 
-    const fetchSearchData = await fetch(SearchApiLink, options);
-    const jsonSearchData = await fetchSearchData.json();
+    // const fetchSearchData = await fetch(SearchApiLink, options);
+    // const jsonSearchData = await fetchSearchData.json();
     // console.log("this is search data", jsonSearchData);
 
     const genreSearchData = await fetch(genreSearchApiLink, options);
     const jsonGenreSearchData = await genreSearchData.json();
+    
     console.log("this is genre search data", jsonGenreSearchData);
   };
   useEffect(() => {
     getdata();
-  }, [genreId]);
+  }, []);
 
   const handleGenre = () => {
     setGenreBtn(!genreBtn);
@@ -90,7 +91,7 @@ export const Header = () => {
                 items-center cursor-pointer rounded-[20px] gap-[8px] pr-[5px] pl-[10px]
                 border-zinc-500"
                     key={index}
-                    onClick={() => goGenre(movieGenre.id)}
+                    onClick={() => goGenre(movieGenres.id)}
                   >
                     {movieGenres.name}
                     <GenresIcon />
