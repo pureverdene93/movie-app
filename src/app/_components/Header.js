@@ -3,8 +3,12 @@ import { useEffect, useState } from "react";
 import { DownIcon } from "../_icons/downIcon";
 import { SearchIcon } from "../_icons/searchIcon";
 import { GenresIcon } from "../_icons/GenresIcon";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const ApiLink = "https://api.themoviedb.org/3/genre/movie/list?language=en";
+const SearchApiLink =
+  "https://api.themoviedb.org/3/search/movie?query=${searchValue}&language=en-US&page=${page}";
 
 const options = {
   method: "GET",
@@ -16,23 +20,41 @@ const options = {
 };
 
 export const Header = () => {
+  const router = useRouter();
   const [movieGenre, setMovieGenre] = useState([]);
   const [genreBtn, setGenreBtn] = useState(false);
+  const [genreId, setGenreId] = useState();
+  const genreSearchApiLink = `https://api.themoviedb.org/3/discover/movie?language=en&with_genres=${genreId}&page=${1}`;
+  // const [searchData, setSearchData] = useState();
+  // const [genreData, setGenreData] = useState();
 
   const getdata = async () => {
     const data = await fetch(ApiLink, options);
     const jsonData = await data.json();
     setMovieGenre(jsonData.genres);
-    console.log("genre list is here", movieGenre);
+    setGenreId(movieGenre.id);
+
+    const fetchSearchData = await fetch(SearchApiLink, options);
+    const jsonSearchData = await fetchSearchData.json();
+    // console.log("this is search data", jsonSearchData);
+
+    const genreSearchData = await fetch(genreSearchApiLink, options);
+    const jsonGenreSearchData = await genreSearchData.json();
+    console.log("this is genre search data", jsonGenreSearchData);
   };
   useEffect(() => {
     getdata();
-  }, []);
+  }, [genreId]);
 
   const handleGenre = () => {
     setGenreBtn(!genreBtn);
   };
-  console.log(genreBtn, "ashgdashdas");
+  // console.log("this is movie genre", movieGenre);
+  console.log("this is genre id", genreId);
+
+  const goGenre = () => {
+    router.push(`/genres/${genreId}`);
+  };
 
   return (
     <div className="w-[1280px] h-[59px] flex flex-row justify-between items-center relative">
@@ -68,6 +90,7 @@ export const Header = () => {
                 items-center cursor-pointer rounded-[20px] gap-[8px] pr-[5px] pl-[10px]
                 border-zinc-500"
                     key={index}
+                    onClick={() => goGenre(movieGenre.id)}
                   >
                     {movieGenres.name}
                     <GenresIcon />
