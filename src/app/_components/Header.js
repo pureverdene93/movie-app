@@ -7,8 +7,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const ApiLink = "https://api.themoviedb.org/3/genre/movie/list?language=en";
-const SearchApiLink =
-  "https://api.themoviedb.org/3/search/movie?query=${searchValue}&language=en-US&page=${page}";
 
 const options = {
   method: "GET",
@@ -40,7 +38,7 @@ export const Header = () => {
 
     const genreSearchData = await fetch(genreSearchApiLink, options);
     const jsonGenreSearchData = await genreSearchData.json();
-    
+
     console.log("this is genre search data", jsonGenreSearchData);
   };
   useEffect(() => {
@@ -53,8 +51,8 @@ export const Header = () => {
   // console.log("this is movie genre", movieGenre);
   console.log("this is genre id", genreId);
 
-  const goGenre = () => {
-    router.push(`/genres/${genreId}`);
+  const goGenre = (id) => {
+    router.push(`/genres/${id}`);
   };
 
   return (
@@ -86,7 +84,7 @@ export const Header = () => {
               {movieGenre.map((movieGenres, index) => {
                 return (
                   <button
-                    className="text-black min-w-[64px] h-[30px] text-[12px] 
+                    className="text-black min-w-[64px] h-[20px] text-[12px] 
                 font-semibold flex flex-row border justify-center 
                 items-center cursor-pointer rounded-[20px] gap-[8px] pr-[5px] pl-[10px]
                 border-zinc-500"
