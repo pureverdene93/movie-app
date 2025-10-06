@@ -7,7 +7,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const ApiLink = "https://api.themoviedb.org/3/genre/movie/list?language=en";
-
+const searchApi =
+  "https://api.themoviedb.org/3/search/movie?query=${searchValue}&language=en-US&page=${page}";
 const options = {
   method: "GET",
   headers: {
@@ -21,25 +22,11 @@ export const Header = () => {
   const router = useRouter();
   const [movieGenre, setMovieGenre] = useState([]);
   const [genreBtn, setGenreBtn] = useState(false);
-  const [genreId, setGenreId] = useState();
-  const genreSearchApiLink = `https://api.themoviedb.org/3/discover/movie?language=en&with_genres=${genreId}&page=${1}`;
-  // const [searchData, setSearchData] = useState();
-  // const [genreData, setGenreData] = useState();
 
   const getdata = async () => {
     const data = await fetch(ApiLink, options);
     const jsonData = await data.json();
     setMovieGenre(jsonData.genres);
-    setGenreId(movieGenre.id);
-
-    // const fetchSearchData = await fetch(SearchApiLink, options);
-    // const jsonSearchData = await fetchSearchData.json();
-    // console.log("this is search data", jsonSearchData);
-
-    const genreSearchData = await fetch(genreSearchApiLink, options);
-    const jsonGenreSearchData = await genreSearchData.json();
-
-    console.log("this is genre search data", jsonGenreSearchData);
   };
   useEffect(() => {
     getdata();
@@ -48,8 +35,6 @@ export const Header = () => {
   const handleGenre = () => {
     setGenreBtn(!genreBtn);
   };
-  // console.log("this is movie genre", movieGenre);
-  console.log("this is genre id", genreId);
 
   const goGenre = (id) => {
     router.push(`/genres/${id}`);

@@ -25,6 +25,7 @@ export const HeroSLider = () => {
   const [loading, setLoading] = useState(false);
   const [sliderMovieTrailer, setSliderMovieTrailer] = useState(null);
   const [currentSlider, setCurrentSlider] = useState(0);
+  const [saveInputData, setSaveInputData] = useState("");
 
   const sliderRef = useRef(null);
   const slideWidth = 1500;
