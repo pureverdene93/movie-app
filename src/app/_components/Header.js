@@ -109,13 +109,11 @@ export const Header = () => {
             placeholder="Search.."
             onChange={movieSearch}
           />
+
           {searchData.map((search) => {
             return (
-              <div
-                className="absolute w-[577px] h-[729px] z-[99]"
-                key={search.id}
-              >
-                <p>{search.title}</p>
+              <div className="absolute w-[577px] h-[729px] z-[98]">
+                <p className="text-[black]">{search.title}</p>
               </div>
             );
           })}
