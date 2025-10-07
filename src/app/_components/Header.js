@@ -7,8 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const ApiLink = "https://api.themoviedb.org/3/genre/movie/list?language=en";
-const searchApi =
-  "https://api.themoviedb.org/3/search/movie?query=${searchValue}&language=en-US&page=${page}";
+
 const options = {
   method: "GET",
   headers: {
@@ -22,15 +21,32 @@ export const Header = () => {
   const router = useRouter();
   const [movieGenre, setMovieGenre] = useState([]);
   const [genreBtn, setGenreBtn] = useState(false);
+  const [saveInputString, setSaveInputString] = useState("");
+  const [searchData, setSearchData] = useState([]);
+
+  const apiSearch = `https://api.themoviedb.org/3/search/movie?query=${saveInputString}&language=en-US&page=${1}`;
+
+  console.log("is input working", saveInputString);
+  console.log("is search working", searchData);
+
+  const movieSearch = (event) => {
+    setSaveInputString(event.target.value);
+  };
 
   const getdata = async () => {
     const data = await fetch(ApiLink, options);
     const jsonData = await data.json();
     setMovieGenre(jsonData.genres);
+
+    const searchData = await fetch(apiSearch, options);
+    const jsonSearchData = await searchData.json();
+    setSearchData(jsonSearchData.results);
+    console.log("input string", saveInputString);
   };
+
   useEffect(() => {
     getdata();
-  }, []);
+  }, [saveInputString]);
 
   const handleGenre = () => {
     setGenreBtn(!genreBtn);
@@ -41,7 +57,7 @@ export const Header = () => {
   };
 
   return (
-    <div className="w-[1280px] h-[59px] flex flex-row justify-between items-center relative">
+    <div className="w-[1280px] h-[59px] flex flex-row justify-between items-center relative z-[100]">
       <img src="Logo.png" alt="logo" className="w-[92px] h-[20px]" />
       <div className="flex gap-[12px]">
         <button
@@ -91,7 +107,18 @@ export const Header = () => {
           <input
             className="w-[341px] h-[36px] rounded-[5px] text-black pl-[10px] text-[14px] inline-block focus:outline-none"
             placeholder="Search.."
+            onChange={movieSearch}
           />
+          {searchData.map((search) => {
+            return (
+              <div
+                className="absolute w-[577px] h-[729px] z-[99]"
+                key={search.id}
+              >
+                <p>{search.title}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
       <button>

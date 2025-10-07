@@ -58,7 +58,7 @@ export const GenreMovieSecton = () => {
           <div className="flex flex-wrap w-[378px] gap-[16px]">
             {genreTitleData.map((genres) => {
               return (
-                <div className="h-[20px]">
+                <div className="h-[20px]" key={genres.id}>
                   <Link href={`/genres/${genres.id}`}>
                     <button
                       className="text-black min-w-[64px] h-[20px] text-[12px] 
@@ -77,9 +77,9 @@ export const GenreMovieSecton = () => {
         </div>
         <div className="w-[1px] bg-zinc-300"></div>
         <div className="flex flex-col gap-[32px]">
-          {genreTitleData.slice(0, 1).map(() => {
+          {genreTitleData.slice(0, 1).map((index) => {
             return (
-              <p className="text-black text-[20px] font-semibold">
+              <p className="text-black text-[20px] font-semibold" key={index}>
                 {totalResults} titles in{" "}
                 {genreTitleData.find((search) => search.id === parseInt(id))
                   ?.name || ""}
