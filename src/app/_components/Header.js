@@ -5,6 +5,8 @@ import { SearchIcon } from "../_icons/searchIcon";
 import { GenresIcon } from "../_icons/GenresIcon";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { SmallestRatingIcon } from "../genres/_icons/smallestRatingIcon";
+import { SeeMore } from "../_icons/SeeMoreIcon";
 
 const ApiLink = "https://api.themoviedb.org/3/genre/movie/list?language=en";
 
@@ -109,14 +111,60 @@ export const Header = () => {
             placeholder="Search.."
             onChange={movieSearch}
           />
+          {saveInputString.length > 0 ? (
+            <div
+              className="w-[577px] h-[729px] bg-white absolute mt-[770px]
+             rounded-[5px] border border-zinc-300 flex flex-col overflow-scroll gap-[5px] items-center
+             pt-[20px] pb-[6px]"
+            >
+              {searchData.slice(0, 5).map((search, index) => {
+                return (
+                  <div
+                    className="w-[540px] h-[116px] flex flex-col gap-[5px]"
+                    key={index}
+                  >
+                    <div className="flex flex-row gap-[16px]">
+                      <img
+                        className="w-[70px] h-[110px] object-cover rounded-[5px]"
+                        src={`https://image.tmdb.org/t/p/original/${search.backdrop_path}`}
+                      />
+                      <div className="flex">
+                        <div className="flex flex-col gap-[5px] w-[345px]">
+                          <p className="text-black text-[15px] font-semibold">
+                            {search.title}
+                          </p>
+                          <p className="flex items-center text-[13px] text-zinc-300">
+                            <SmallestRatingIcon />
+                            <span className="text-black text-[14px] font-[400]">
+                              {search.vote_average?.toFixed(1)}
+                            </span>
+                            /10
+                          </p>
 
-          {searchData.map((search) => {
-            return (
-              <div className="absolute w-[577px] h-[729px] z-[98]">
-                <p className="text-[black]">{search.title}</p>
+                          <p className="text-[14px] text-black font-[400] ">
+                            {search.release_date}
+                          </p>
+                        </div>
+                        <div className="flex items-end">
+                          <button className="w-[120px] h-[36px] flex cursor-pointer items-center flex-row text-[14px] text-black justify-evenly">
+                            See More <SeeMore />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="h-[1px] bg-zinc-300"></div>
+                  </div>
+                );
+              })}
+              <div className="w-[540px] flex justify-start items-center h-[40px]">
+                <p className="text-black text-[14px] flex text-start">
+                  See all results for "{saveInputString}"
+                </p>
               </div>
-            );
-          })}
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <button>

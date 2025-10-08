@@ -17,7 +17,7 @@ const options = {
 export const GenreMovieSecton = () => {
   const param = useParams();
   const { id } = param;
-  const genreSearchApiLink = `https://api.themoviedb.org/3/discover/movie?language=en&with_genres=${id}&page=${1}`;
+  const genreSearchApiLink = `https://api.themoviedb.org/3/discover/movie?language=en&with_genres=${id}&page=${100}`;
   const genreNameApiLink =
     "https://api.themoviedb.org/3/genre/movie/list?language=en";
 
