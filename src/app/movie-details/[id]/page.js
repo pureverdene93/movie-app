@@ -94,7 +94,7 @@ export default function Home() {
     <div className="back">
       <Header />
       <div className="flex flex-col mt-[52px] mb-[100px] gap-[32px] w-[1080px]">
-        <div className=" flex flex-col gap-[24px]">
+        <div className=" flex flex-col gap-[40px]">
           <div className=" h-[72px] flex items-center justify-between">
             <div>
               <p className="text-black font-[700] text-[36px]">

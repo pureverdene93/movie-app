@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { SmallestRatingIcon } from "../genres/_icons/smallestRatingIcon";
 import { SeeMore } from "../_icons/SeeMoreIcon";
+// import { useRouter } from "next/navigation";
 
 const ApiLink = "https://api.themoviedb.org/3/genre/movie/list?language=en";
 
@@ -57,13 +58,18 @@ export const Header = () => {
   const goGenre = (id) => {
     router.push(`/genres/${id}`);
   };
+  console.log();
+  const handleSeeAllSearched = () => {
+    router.push(`/search/movie?query=${saveInputString}&language=en-US&page=1`);
+  };
 
   return (
     <div className="w-[1280px] h-[59px] flex flex-row justify-between items-center relative z-[100]">
-      <img src="Logo.png" alt="logo" className="w-[92px] h-[20px]" />
-      <div className="flex gap-[12px]">
+      <img src="/Logo.png" alt="logo" className="w-[92px] h-[20px]" />
+      <div className="flex gap-[12px] relative">
         <button
-          className="flex items-center justify-center gap-[8px] w-[97px] h-[36px] text-black rounded-[5px] cursor-pointer text-[14px] border-1 border-zinc-200"
+          className="flex items-center justify-center gap-[8px] w-[97px] h-[36px] text-black
+           rounded-[5px] cursor-pointer text-[14px] border-1 border-zinc-200"
           onClick={handleGenre}
         >
           <DownIcon />
@@ -104,64 +110,94 @@ export const Header = () => {
         ) : (
           ""
         )}
-        <div className="w-[379px] h-[36px] border  rounded-[5px] flex items-center justify-center">
+        <div
+          className="w-[379px] h-[36px] border  rounded-[5px] flex items-center
+         justify-center relative"
+        >
           <SearchIcon />
           <input
-            className="w-[341px] h-[36px] rounded-[5px] text-black pl-[10px] text-[14px] inline-block focus:outline-none"
+            className="w-[341px] h-[36px] rounded-[5px] text-black
+             pl-[10px] text-[14px] inline-block focus:outline-none"
             placeholder="Search.."
+            type="search"
             onChange={movieSearch}
           />
-          {saveInputString.length > 0 ? (
-            <div
-              className="w-[577px] h-[729px] bg-white absolute mt-[770px]
-             rounded-[5px] border border-zinc-300 flex flex-col overflow-scroll gap-[5px] items-center
-             pt-[20px] pb-[6px]"
-            >
-              {searchData.slice(0, 5).map((search, index) => {
-                return (
-                  <div
-                    className="w-[540px] h-[116px] flex flex-col gap-[5px]"
-                    key={index}
-                  >
-                    <div className="flex flex-row gap-[16px]">
-                      <img
-                        className="w-[70px] h-[110px] object-cover rounded-[5px]"
-                        src={`https://image.tmdb.org/t/p/original/${search.backdrop_path}`}
-                      />
-                      <div className="flex">
-                        <div className="flex flex-col gap-[5px] w-[345px]">
-                          <p className="text-black text-[15px] font-semibold">
-                            {search.title}
-                          </p>
-                          <p className="flex items-center text-[13px] text-zinc-300">
-                            <SmallestRatingIcon />
-                            <span className="text-black text-[14px] font-[400]">
-                              {search.vote_average?.toFixed(1)}
-                            </span>
-                            /10
-                          </p>
 
-                          <p className="text-[14px] text-black font-[400] ">
-                            {search.release_date}
-                          </p>
+          {saveInputString.length > 0 ? (
+            <>
+              {searchData.length > 0 ? (
+                <>
+                  <div
+                    className="w-[577px] h-[690px] bg-white absolute mt-[730px]
+             rounded-[5px] border border-zinc-300 flex flex-col
+             overflow-scroll gap-[5px] items-center
+             pt-[20px]"
+                  >
+                    {searchData.slice(0, 5).map((search, index) => {
+                      return (
+                        <div
+                          className="w-[540px] h-[116px] flex flex-col gap-[5px]"
+                          key={index}
+                        >
+                          <div className="flex flex-row gap-[16px]">
+                            <img
+                              className="w-[70px] h-[110px] object-cover rounded-[5px]"
+                              src={`https://image.tmdb.org/t/p/original/${search.backdrop_path}`}
+                            />
+                            <div className="flex">
+                              <div className="flex flex-col gap-[5px] w-[345px]">
+                                <p className="text-black text-[15px] font-semibold">
+                                  {search.title}
+                                </p>
+                                <p className="flex items-center text-[13px] text-zinc-300">
+                                  <SmallestRatingIcon />
+                                  <span className="text-black text-[14px] font-[400]">
+                                    {search.vote_average?.toFixed(1)}
+                                  </span>
+                                  /10
+                                </p>
+
+                                <p className="text-[14px] text-black font-[400] ">
+                                  {search.release_date}
+                                </p>
+                              </div>
+                              <div className="flex items-end">
+                                <Link href={`/movie-details/${search.id}`}>
+                                  <button
+                                    className="w-[120px] h-[36px] flex cursor-pointer
+                             items-center flex-row
+                             text-[14px] text-black justify-evenly"
+                                  >
+                                    See More <SeeMore />
+                                  </button>
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="h-[1px] bg-zinc-300"></div>
                         </div>
-                        <div className="flex items-end">
-                          <button className="w-[120px] h-[36px] flex cursor-pointer items-center flex-row text-[14px] text-black justify-evenly">
-                            See More <SeeMore />
-                          </button>
-                        </div>
-                      </div>
+                      );
+                    })}
+                    <div className="w-[530px] flex justify-between items-center h-[55px] ">
+                      <p
+                        className="text-black text-[14px] flex text-start cursor-pointer"
+                        onClick={handleSeeAllSearched}
+                      >
+                        See all results for "{saveInputString}"
+                      </p>
                     </div>
-                    <div className="h-[1px] bg-zinc-300"></div>
                   </div>
-                );
-              })}
-              <div className="w-[540px] flex justify-start items-center h-[40px]">
-                <p className="text-black text-[14px] flex text-start">
-                  See all results for "{saveInputString}"
-                </p>
-              </div>
-            </div>
+                </>
+              ) : (
+                <div
+                  className="w-[577px] h-[95px] bg-white flex justify-center
+                 items-center absolute rounded-[5px] border-zinc-300
+                 text-black text-[14px] mt-[135px]"
+                >
+                  No results found.
+                </div>
+              )}
+            </>
           ) : (
             ""
           )}
@@ -169,7 +205,7 @@ export const Header = () => {
       </div>
       <button>
         <img
-          src="Modes.png"
+          src="/Modes.png"
           alt="lightMode"
           className="w-[36px] h-[36px] cursor-pointer"
         />
