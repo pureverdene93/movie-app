@@ -21,12 +21,9 @@ const options = {
 
 export const MovieSectionUpcoming = (props) => {
   const { title } = props;
-  const [upcomingMovieData, setUpcomingMovieData] = useState(
-    []
-    // seeMoreUpcoming === 1
-  );
-  const [loading, setLoading] = useState(false);
-  const [seeMoreUpcoming, setSeeMoreUpcoming] = useState(1);
+  const [upcomingMovieData, setUpcomingMovieData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  // const [seeMoreUpcoming, setSeeMoreUpcoming] = useState(1);
 
   const getData = async () => {
     setLoading(true);
@@ -34,7 +31,9 @@ export const MovieSectionUpcoming = (props) => {
     const jsonData = await data.json();
     // console.log(jsonData);
     setUpcomingMovieData(jsonData.results);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -43,7 +42,26 @@ export const MovieSectionUpcoming = (props) => {
   // console.log(upcomingMovieData);
 
   if (loading) {
-    return <div className="text-black text-[100px]">...loading test</div>;
+    return (
+      <div className="flex flex-col gap-[36px] items-center">
+        <div className=" w-[1275px] flex items-center justify-between ">
+          <div className="w-[250px] h-[32px] bg-white rounded-[5px]"></div>
+          <div className="w-[165px] h-[32px] bg-white rounded-[5px]"></div>
+        </div>
+        <div className="w-[1440px] flex flex-wrap gap-[32px] justify-center">
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+        </div>
+      </div>
+    );
   }
   if (!loading && typeof upcomingMovieData === "undefined") {
     return <div className="text-black text-[100px]">Something wrong Test</div>;

@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { MovieCard } from "@/app/_features/MovieCard";
 import { Pre } from "@/app/seeMoreUpcoming/_icons/Pre";
 import { Next } from "@/app/seeMoreUpcoming/_icons/Next";
+import { NextNotWorkingIcon } from "@/app/_icons/NextNotWorking";
+import { PrevNotWorkingIcon } from "@/app/_icons/prevNotWorkingIcon";
 
 const options = {
   method: "GET",
@@ -16,23 +18,25 @@ const options = {
 
 export const PopularMovieSection = (props) => {
   const [page, setPage] = useState(1);
+  const [loader, setLoader] = useState(true);
   const ApiLink = `https://api.themoviedb.org/3/movie/popular?language=en-US&page=${page}`;
 
   const { title } = props;
 
   const [popularMovieData, setPopularMovieData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [pagination, setPagination] = useState(false);
 
   const getData = async () => {
-    setLoading(true);
+    setLoader(true);
     const data = await fetch(ApiLink, options);
     const jsonData = await data.json();
     setTotalPages(jsonData.total_pages);
     console.log("how many pages are in here", jsonData.total_pages);
     setPopularMovieData(jsonData.results);
-    setLoading(false);
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -63,12 +67,45 @@ export const PopularMovieSection = (props) => {
     setPage(num);
   };
 
-  if (loading) {
-    return <div className="text-black text-[100px]">...loading test</div>;
+  if (loader) {
+    return (
+      <div className="flex flex-col gap-[36px] items-center">
+        <div className=" w-[1275px] flex items-center justify-start ">
+          <div className="w-[250px] h-[32px] bg-white rounded-[5px]"></div>
+        </div>
+        <div className="w-[1440px] flex flex-wrap gap-[32px] justify-center">
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+        </div>
+        <div className="w-[1275px] flex items-end justify-end gap-[100px]">
+          <div className="w-[114px] h-[24px] bg-white rounded-[5px]"></div>
+          <div className="w-[88px] h-[24px] bg-white rounded-[5px]"></div>
+        </div>
+      </div>
+    );
   }
-  if (!loading && typeof popularMovieData === "undefined") {
+  if (!loader && typeof popularMovieData === "undefined") {
     return <div className="text-black text-[100px]">Something wrong Test</div>;
   }
+
   return (
     <div className=" flex flex-col gap-[36px] justify-center items-center">
       <div className="w-[1275px]">
@@ -91,14 +128,16 @@ export const PopularMovieSection = (props) => {
       </div>
       <div className="flex flex-row items-center h-[40px] justify-end w-[1275px]">
         <button
-          className="w-[114px] [h-40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] text-black"
+          className={`w-[114px] [h-40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] ${
+            page === 1 ? "text-zinc-300" : "text-black"
+          }`}
           onClick={prePage}
         >
-          <Pre />
+          {page === 1 ? <PrevNotWorkingIcon /> : <Pre />}
           Previous
         </button>
         <div className="flex flex-row gap-[5px]">
-          {Array.from({ length: 10 }, (_, i) => {
+          {Array.from({ length: 4 }, (_, i) => {
             const num = i + 1;
 
             return (
@@ -116,11 +155,13 @@ export const PopularMovieSection = (props) => {
         </div>
 
         <button
-          className="w-[88px] h-[40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] text-black"
+          className={`w-[88px] h-[40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] ${
+            page === 4 ? "text-zinc-300" : "text-black"
+          }`}
           onClick={nextPage}
         >
           Next
-          <Next />
+          {page === 4 ? <NextNotWorkingIcon /> : <Next />}
         </button>
       </div>
     </div>

@@ -19,7 +19,7 @@ const options = {
 export const MovieSectionPopular = (props) => {
   const { title } = props;
   const [popularMovieData, setPopularMovieData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const getData = async () => {
     setLoading(true);
@@ -27,16 +27,37 @@ export const MovieSectionPopular = (props) => {
     const jsonData = await data.json();
     // console.log(jsonData);
     setPopularMovieData(jsonData.results);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
 
   useEffect(() => {
     getData();
   }, []);
   // console.log(popularMovieData);
-  console.log(popularMovieData, "asdosaodoasmdksandksakis");
+  // console.log(popularMovieData, "asdosaodoasmdksandksakis");
   if (loading) {
-    return <div className="text-black text-[100px]">...loading test</div>;
+    return (
+      <div className="flex flex-col gap-[36px] items-center">
+        <div className=" w-[1275px] flex items-center justify-between ">
+          <div className="w-[250px] h-[32px] bg-white rounded-[5px]"></div>
+          <div className="w-[165px] h-[32px] bg-white rounded-[5px]"></div>
+        </div>
+        <div className="w-[1440px] flex flex-wrap gap-[32px] justify-center">
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+        </div>
+      </div>
+    );
   }
   if (!loading && typeof popularMovieData === "undefined") {
     return <div className="text-black text-[100px]">Something wrong Test</div>;

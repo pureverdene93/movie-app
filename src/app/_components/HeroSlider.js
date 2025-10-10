@@ -22,21 +22,23 @@ const options = {
 
 export const HeroSLider = () => {
   const [heroSliderData, setHeroSliderData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [sliderMovieTrailer, setSliderMovieTrailer] = useState(null);
   const [currentSlider, setCurrentSlider] = useState(0);
-  const [saveInputData, setSaveInputData] = useState("");
+  // const [saveInputData, setSaveInputData] = useState("");
+  // const [error, setError] = useState(null);
 
   const sliderRef = useRef(null);
   const slideWidth = 1500;
 
   const getData = async () => {
     setLoading(true);
-
     const data = await fetch(ApiLink, options);
     const jsonData = await data.json();
     setHeroSliderData(jsonData.results);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
   useEffect(() => {
     getData();
@@ -64,11 +66,7 @@ export const HeroSLider = () => {
   // console.log("This is hero slider data", heroSliderData);
 
   if (loading) {
-    return (
-      <div className="text-black text-[100px] w-[1500px] h-[600px] bg-white rounded-[5px]">
-        ...loading test
-      </div>
-    );
+    return <div className="w-[1440px] h-[600px] bg-white"></div>;
   }
   if (!loading && typeof heroSliderData === "undefined") {
     return (
@@ -132,7 +130,7 @@ export const HeroSLider = () => {
                       <p className="text-[36px] text-white w-[400px]">
                         {movie.title}
                       </p>
-                      <p className="flex items-center gap-[5px]">
+                      <p className="flex items-center gap-[5px] text-white">
                         <RatingIcon /> {movie.vote_average.toFixed(1)}
                         <span className="text-zinc-400">/10</span>
                       </p>
@@ -162,14 +160,22 @@ export const HeroSLider = () => {
         </div>
       </div>
       {sliderMovieTrailer && (
-        <iframe
-          className="youtubeTrailer"
-          src={`https://www.youtube.com/embed/${sliderMovieTrailer}`}
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+        <>
+          {/* <button
+            className="text-white text-[20px]"
+            onClick={() => setSliderMovieTrailer(null)}
+          >
+            X
+          </button> */}
+          <iframe
+            className="youtubeTrailer"
+            src={`https://www.youtube.com/embed/${sliderMovieTrailer}`}
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </>
       )}
     </div>
   );

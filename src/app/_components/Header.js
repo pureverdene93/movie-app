@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { SmallestRatingIcon } from "../genres/_icons/smallestRatingIcon";
 import { SeeMore } from "../_icons/SeeMoreIcon";
+import { DarkModeIcon } from "../_icons/DarkModeIcon";
+import { MajorLogoIcon } from "../_icons/MajorLogoIcon";
+// import { Button } from "../../../@/components/ui/button";
 // import { useRouter } from "next/navigation";
 
 const ApiLink = "https://api.themoviedb.org/3/genre/movie/list?language=en";
@@ -65,7 +68,11 @@ export const Header = () => {
 
   return (
     <div className="w-[1280px] h-[59px] flex flex-row justify-between items-center relative z-[100]">
-      <img src="/Logo.png" alt="logo" className="w-[92px] h-[20px]" />
+      <Link href={"/"}>
+        <button className="cursor-pointer">
+          <MajorLogoIcon />
+        </button>
+      </Link>
       <div className="flex gap-[12px] relative">
         <button
           className="flex items-center justify-center gap-[8px] w-[97px] h-[36px] text-black
@@ -203,12 +210,8 @@ export const Header = () => {
           )}
         </div>
       </div>
-      <button>
-        <img
-          src="/Modes.png"
-          alt="lightMode"
-          className="w-[36px] h-[36px] cursor-pointer"
-        />
+      <button className="cursor-pointer">
+        <DarkModeIcon />
       </button>
     </div>
   );

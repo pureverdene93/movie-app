@@ -1,4 +1,4 @@
-export const NextIcon = () => {
+export const PrevNotWorkingIcon = () => {
   return (
     <svg
       width="16"
@@ -8,8 +8,8 @@ export const NextIcon = () => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M6 12L10 8L6 4"
-        stroke="#18181B"
+        d="M10 12L6 8L10 4"
+        stroke="#D4D4D8"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

@@ -1,9 +1,12 @@
 "use client";
 import { useState } from "react";
 import { useEffect } from "react";
-import { MovieCard } from "@/app/_features/MovieCard";
 import { Pre } from "../_icons/Pre";
 import { Next } from "../_icons/Next";
+import { MovieCard } from "@/app/_features/MovieCard";
+import { PrevNotWorkingIcon } from "@/app/_icons/prevNotWorkingIcon";
+import { PrevIcon } from "@/app/_icons/PrevIcon";
+import { NextNotWorkingIcon } from "@/app/_icons/NextNotWorking";
 
 const options = {
   method: "GET",
@@ -32,7 +35,9 @@ export const UpcomingMovieSection = (props) => {
     setTotalPages(jsonData.total_pages);
     console.log("how many pages are in here", jsonData.total_pages);
     setUpcomingMovieData(jsonData.results);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -64,7 +69,39 @@ export const UpcomingMovieSection = (props) => {
   };
 
   if (loading) {
-    return <div className="text-black text-[100px]">...loading test</div>;
+    return (
+      <div className="flex flex-col gap-[36px] items-center">
+        <div className=" w-[1275px] flex items-center justify-start ">
+          <div className="w-[250px] h-[32px] bg-white rounded-[5px]"></div>
+        </div>
+        <div className="w-[1440px] flex flex-wrap gap-[32px] justify-center">
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+        </div>
+        <div className="w-[1275px] flex items-end justify-end gap-[100px]">
+          <div className="w-[114px] h-[24px] bg-white rounded-[5px]"></div>
+          <div className="w-[88px] h-[24px] bg-white rounded-[5px]"></div>
+        </div>
+      </div>
+    );
   }
   if (!loading && typeof upcomingMovieData === "undefined") {
     return <div className="text-black text-[100px]">Something wrong Test</div>;
@@ -91,14 +128,16 @@ export const UpcomingMovieSection = (props) => {
       </div>
       <div className="flex flex-row items-center h-[40px] justify-end w-[1275px]">
         <button
-          className="w-[114px] [h-40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] text-black"
+          className={`w-[114px] [h-40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] ${
+            page === 1 ? "text-zinc-300" : "text-black"
+          }`}
           onClick={prePage}
         >
-          <Pre />
+          {page === 1 ? <PrevNotWorkingIcon /> : <PrevIcon />}
           Previous
         </button>
         <div className="flex flex-row gap-[5px]">
-          {Array.from({ length: 10 }, (_, i) => {
+          {Array.from({ length: 4 }, (_, i) => {
             const num = i + 1;
 
             return (
@@ -115,11 +154,13 @@ export const UpcomingMovieSection = (props) => {
           })}
         </div>
         <button
-          className="w-[88px] h-[40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] text-black"
+          className={`w-[88px] h-[40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] ${
+            page === 4 ? "text-zinc-300" : "text-black"
+          }`}
           onClick={nextPage}
         >
           Next
-          <Next />
+          {page === 4 ? <NextNotWorkingIcon /> : <Next />}
         </button>
       </div>
     </div>

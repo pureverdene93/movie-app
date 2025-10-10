@@ -39,8 +39,10 @@ export default function Home() {
   const [movieTeamDetailCast, setMovieTeamDetailCast] = useState([]);
   const [similarMovieData, setSimilarMovieData] = useState([]);
   const [trailer, setTrailer] = useState(null);
+  const [loader, setLoader] = useState(false);
 
   const getData = async () => {
+    setLoader(true);
     const data = await fetch(ApiLink, options);
     const jsonData = await data.json();
     setMovieDetail(jsonData);
@@ -55,6 +57,9 @@ export default function Home() {
     const similarMovieJsonData = await similarMovieData.json();
     setSimilarMovieData(similarMovieJsonData.results);
 
+    setTimeout(() => {
+      setLoader(false);
+    }, 1000);
     // console.log("this is movie detail", jsonData.genres);
   };
 
@@ -67,11 +72,15 @@ export default function Home() {
     if (findTrailerData) {
       setTrailer(findTrailerData.key);
     } else {
-      <div>Trailer </div>;
+      <div className="absolute text-black text-[100px]">Trailer not found</div>;
     }
     // console.log("this is trailer data", findTrailerData);
     // console.log("what is this", trailer);
   };
+
+  // if (loader) {
+  //   return <div>test</div>;
+  // }
 
   console.log("this is similar movies data", similarMovieData);
 
@@ -93,6 +102,7 @@ export default function Home() {
   return (
     <div className="back">
       <Header />
+
       <div className="flex flex-col mt-[52px] mb-[100px] gap-[32px] w-[1080px]">
         <div className=" flex flex-col gap-[40px]">
           <div className=" h-[72px] flex items-center justify-between">
@@ -197,16 +207,26 @@ export default function Home() {
             );
           })}
         </div>
-        {trailer && (
-          <iframe
-            className="youtubeTrailerDetails"
-            src={`https://www.youtube.com/embed/${trailer}`}
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        )}
+        <div>
+          {trailer && (
+            <div>
+              <button
+                onClick={() => setTrailer(null)}
+                className="text-white cursor-pointer text-[20px]"
+              >
+                X
+              </button>
+              <iframe
+                className="youtubeTrailerDetails"
+                src={`https://www.youtube.com/embed/${trailer}`}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          )}
+        </div>
       </div>
       <Footer />
     </div>

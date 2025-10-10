@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { MovieCard } from "@/app/_features/MovieCard";
 import { Next } from "@/app/seeMoreUpcoming/_icons/Next";
 import { Pre } from "@/app/seeMoreUpcoming/_icons/Pre";
+import { PrevNotWorkingIcon } from "@/app/_icons/prevNotWorkingIcon";
+import { NextNotWorkingIcon } from "@/app/_icons/NextNotWorking";
 
 const options = {
   method: "GET",
@@ -21,7 +23,7 @@ export const TopRatedMovieSection = (props) => {
   const { title } = props;
 
   const [topRatedMovieData, setTopRatedMovieData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const [pagination, setPagination] = useState(false);
 
@@ -32,7 +34,9 @@ export const TopRatedMovieSection = (props) => {
     setTotalPages(jsonData.total_pages);
     console.log("how many pages are in here", jsonData.total_pages);
     setTopRatedMovieData(jsonData.results);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -64,7 +68,39 @@ export const TopRatedMovieSection = (props) => {
   };
 
   if (loading) {
-    return <div className="text-black text-[100px]">...loading test</div>;
+    return (
+      <div className="flex flex-col gap-[36px] items-center">
+        <div className=" w-[1275px] flex items-center justify-start ">
+          <div className="w-[250px] h-[32px] bg-white rounded-[5px]"></div>
+        </div>
+        <div className="w-[1440px] flex flex-wrap gap-[32px] justify-center">
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+        </div>
+        <div className="w-[1275px] flex items-end justify-end gap-[100px]">
+          <div className="w-[114px] h-[24px] bg-white rounded-[5px]"></div>
+          <div className="w-[88px] h-[24px] bg-white rounded-[5px]"></div>
+        </div>
+      </div>
+    );
   }
   if (!loading && typeof topRatedMovieData === "undefined") {
     return <div className="text-black text-[100px]">Something wrong Test</div>;
@@ -91,14 +127,16 @@ export const TopRatedMovieSection = (props) => {
       </div>
       <div className="flex flex-row items-center h-[40px] justify-end w-[1275px]">
         <button
-          className="w-[114px] [h-40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] text-black"
+          className={`w-[114px] [h-40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] ${
+            page === 1 ? "text-zinc-300" : "text-black"
+          }`}
           onClick={prePage}
         >
-          <Pre />
+          {page === 1 ? <PrevNotWorkingIcon /> : <Pre />}
           Previous
         </button>
         <div className="flex flex-row gap-[5px]">
-          {Array.from({ length: 10 }, (_, i) => {
+          {Array.from({ length: 4 }, (_, i) => {
             const num = i + 1;
 
             return (
@@ -115,11 +153,13 @@ export const TopRatedMovieSection = (props) => {
           })}
         </div>
         <button
-          className="w-[88px] h-[40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] text-black"
+          className={`w-[88px] h-[40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] ${
+            page === 4 ? "text-zinc-300" : "text-black"
+          }`}
           onClick={nextPage}
         >
           Next
-          <Next />
+          {page === 4 ? <NextNotWorkingIcon /> : <Next />}
         </button>
       </div>
     </div>
