@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import { GenreMovieCard } from "./genreMovieCard";
 import { GenresIcon } from "@/app/_icons/GenresIcon";
 import Link from "next/link";
+import { PrevNotWorkingIcon } from "@/app/_icons/prevNotWorkingIcon";
+import { PrevIcon } from "@/app/_icons/PrevIcon";
+import { NextNotWorkingIcon } from "@/app/_icons/NextNotWorking";
+import { Next } from "@/app/seeMoreUpcoming/_icons/Next";
 const options = {
   method: "GET",
   headers: {
@@ -17,15 +21,18 @@ const options = {
 export const GenreMovieSecton = () => {
   const param = useParams();
   const { id } = param;
-  const genreSearchApiLink = `https://api.themoviedb.org/3/discover/movie?language=en&with_genres=${id}&page=${100}`;
+  const [page, setPage] = useState(1);
+  const genreSearchApiLink = `https://api.themoviedb.org/3/discover/movie?language=en&with_genres=${id}&page=${page}`;
   const genreNameApiLink =
     "https://api.themoviedb.org/3/genre/movie/list?language=en";
 
   const [genreData, setGenreData] = useState([]);
   const [genreTitleData, setGenreTitleData] = useState([]);
   const [totalResults, setTotalResults] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const getData = async () => {
+    setLoading(true);
     const data = await fetch(genreSearchApiLink, options);
     const jsonData = await data.json();
     setGenreData(jsonData.results);
@@ -36,13 +43,70 @@ export const GenreMovieSecton = () => {
     const genreJsonData = await genreData.json();
     setGenreTitleData(genreJsonData.genres);
     console.log("genre yu butsaaj baina", genreJsonData);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
   useEffect(() => {
     getData();
-  }, [id]);
+  }, [id, page]);
 
-  console.log("this is genre data", genreData);
-  console.log("major id", id);
+  const nextPage = () => {
+    setPage(page + 1);
+  };
+  const prePage = () => {
+    if (page === 1) {
+      setPage(1);
+    }
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+  const pageNum = (num) => {
+    setPage(num);
+  };
+  if (loading) {
+    return (
+      <div className="flex flex-col gap-[32px] mb-[32px]">
+        <div className="w-[200px] h-[32px] bg-white rounded-[5px] mt-[56px]"></div>
+        <div className="w-[1280px] flex flex-row justify-between">
+          <div className="w-[378px] h-[350px] rounded-[5px] bg-white"></div>
+          <div className="flex flex-col gap-[32px] w-[806px]">
+            <div className="bg-white w-[280px] h-[32px] rounded-[5px]"></div>
+            <div className="flex flex-wrap gap-[48px]">
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+              <div className="w-[165px] h-[331px] rounded-[5px] bg-white"></div>
+            </div>
+            <div className="w-[806px] items-end justify-end flex flex-row gap-[100px]">
+              <div className="w-[114px] h-[24px] bg-white rounded-[5px]"></div>
+              <div className="w-[88px] h-[24px] bg-white rounded-[5px]"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // console.log("this is genre data", genreData);
+  // console.log("major id", id);
 
   return (
     <div className="w-[1280px] flex flex-col gap-[32px] mt-[52px] mb-[32px]">
@@ -101,6 +165,43 @@ export const GenreMovieSecton = () => {
             })}
           </div>
         </div>
+      </div>
+      <div className="flex flex-row items-center h-[40px] justify-end w-[1280px]">
+        <button
+          className={`w-[114px] [h-40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] ${
+            page === 1 ? "text-zinc-300" : "text-black"
+          }`}
+          onClick={prePage}
+        >
+          {page === 1 ? <PrevNotWorkingIcon /> : <PrevIcon />}
+          Previous
+        </button>
+        <div className="flex flex-row gap-[5px]">
+          {Array.from({ length: 4 }, (_, i) => {
+            const num = i + 1;
+
+            return (
+              <button
+                key={num}
+                onClick={() => pageNum(num)}
+                className={`px-3 py-1 cursor-pointer rounded-md ${
+                  page === num ? "bg-black text-white" : "text-black border"
+                }`}
+              >
+                {num}
+              </button>
+            );
+          })}
+        </div>
+        <button
+          className={`w-[88px] h-[40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] ${
+            page === 4 ? "text-zinc-300" : "text-black"
+          }`}
+          onClick={nextPage}
+        >
+          Next
+          {page === 4 ? <NextNotWorkingIcon /> : <Next />}
+        </button>
       </div>
     </div>
   );

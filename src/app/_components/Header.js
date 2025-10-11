@@ -128,6 +128,12 @@ export const Header = () => {
             placeholder="Search.."
             type="search"
             onChange={movieSearch}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && saveInputString.trim().length > 0) {
+                handleSeeAllSearched();
+                setSaveInputString("");
+              }
+            }}
           />
 
           {saveInputString.length > 0 ? (

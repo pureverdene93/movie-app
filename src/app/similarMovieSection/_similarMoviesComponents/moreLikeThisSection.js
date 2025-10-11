@@ -25,14 +25,19 @@ export const MoreLikeThisSection = () => {
   const [similarData, setSimilarData] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const similarMovieApiLink = `https://api.themoviedb.org/3/movie/${id}/similar?language=en-US&page=${page}`;
 
   const getData = async () => {
+    setLoading(true);
     const data = await fetch(similarMovieApiLink, options);
     const jsonData = await data.json();
     setSimilarData(jsonData.results);
     setTotalPages(jsonData.total_pages);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
     console.log(jsonData.results);
   };
 
@@ -58,6 +63,45 @@ export const MoreLikeThisSection = () => {
     setPage(num);
   };
 
+  if (loading) {
+    return (
+      <div className="flex flex-col gap-[36px] items-center">
+        <div className=" w-[1275px] flex items-center justify-start ">
+          <div className="w-[250px] h-[32px] bg-white rounded-[5px]"></div>
+        </div>
+        <div className="w-[1440px] flex flex-wrap gap-[32px] justify-center">
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
+        </div>
+        <div className="w-[1275px] flex items-end justify-end gap-[100px]">
+          <div className="w-[114px] h-[24px] bg-white rounded-[5px]"></div>
+          <div className="w-[88px] h-[24px] bg-white rounded-[5px]"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!loading && typeof similarData === "undefined") {
+    return <div className="text-[100px]">Something went wrong test</div>;
+  }
   return (
     <div className="w-[1280px] flex gap-[32px] flex-col">
       <MovieType title={"More like this"} />
