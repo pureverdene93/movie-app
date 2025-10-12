@@ -205,7 +205,7 @@ export const Header = () => {
                 <div
                   className="w-[577px] h-[95px] bg-white flex justify-center
                  items-center absolute rounded-[5px] border-zinc-300
-                 text-black text-[14px] mt-[135px]"
+                 text-black text-[14px] mt-[136px]"
                 >
                   No results found.
                 </div>
