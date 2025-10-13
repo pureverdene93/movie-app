@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className="back">
       <Header />
-      <div className="flex flex-col gap-[52px]">
+      <div className="flex flex-col gap-[52px] max-sm:gap-[32px]">
         <div className="flex flex-col gap-[52px]">
           <HeroSLider />
           <MovieSectionUpcoming title={"Upcoming"} />

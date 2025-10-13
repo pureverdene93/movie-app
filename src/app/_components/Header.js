@@ -9,6 +9,7 @@ import { SmallestRatingIcon } from "../genres/_icons/smallestRatingIcon";
 import { SeeMore } from "../_icons/SeeMoreIcon";
 import { DarkModeIcon } from "../_icons/DarkModeIcon";
 import { MajorLogoIcon } from "../_icons/MajorLogoIcon";
+import { ResponsiveSearchIcon } from "../_icons/SearchIconResponsive";
 // import { Button } from "../../../@/components/ui/button";
 // import { useRouter } from "next/navigation";
 
@@ -37,6 +38,7 @@ export const Header = () => {
 
   const movieSearch = (event) => {
     setSaveInputString(event.target.value);
+    setGenreBtn(false);
   };
 
   const getdata = async () => {
@@ -56,6 +58,7 @@ export const Header = () => {
 
   const handleGenre = () => {
     setGenreBtn(!genreBtn);
+    setSaveInputString("");
   };
 
   const goGenre = (id) => {
@@ -67,21 +70,37 @@ export const Header = () => {
   };
 
   return (
-    <div className="w-[1280px] h-[59px] flex flex-row justify-between items-center relative z-[100]">
+    <div
+      className="w-[1280px] h-[59px] flex flex-row justify-between items-center relative z-[100]
+      max-sm:w-[375px] max-sm:justify-center"
+    >
       <Link href={"/"}>
-        <button className="cursor-pointer">
+        <button className="cursor-pointer max-sm:hidden">
           <MajorLogoIcon />
         </button>
       </Link>
-      <div className="flex gap-[12px] relative">
+      <div className="flex  gap-[12px] relative max-sm:flex-row max-sm:justify-between max-sm:w-[337px]">
         <button
           className="flex items-center justify-center gap-[8px] w-[97px] h-[36px] text-black
-           rounded-[5px] cursor-pointer text-[14px] border-1 border-zinc-200"
+           rounded-[5px] cursor-pointer text-[14px] border-1 border-zinc-200
+           max-sm:hidden"
           onClick={handleGenre}
         >
           <DownIcon />
           Genre
         </button>
+        <button className="hidden cursor-pointer max-sm:block">
+          <MajorLogoIcon />
+        </button>
+        <div className="flex flex-row">
+          <button className="hidden cursor-pointer max-sm:block">
+            <ResponsiveSearchIcon />
+          </button>
+          <button className="hidden cursor-pointer max-sm:block">
+            <DarkModeIcon />
+          </button>
+        </div>
+
         {genreBtn === true ? (
           <div
             className="w-[577px] min-h-[300px] absolute bg-zinc-100 z-[99] flex items-center
@@ -103,7 +122,7 @@ export const Header = () => {
                     className="text-black min-w-[64px] h-[20px] text-[12px] 
                 font-semibold flex flex-row border justify-center 
                 items-center cursor-pointer rounded-[20px] gap-[8px] pr-[5px] pl-[10px]
-                border-zinc-500"
+                border-zinc-500 hover:bg-zinc-300"
                     key={index}
                     onClick={() => goGenre(movieGenres.id)}
                   >
@@ -119,12 +138,15 @@ export const Header = () => {
         )}
         <div
           className="w-[379px] h-[36px] border  rounded-[5px] flex items-center
-         justify-center relative"
+         justify-center relative
+         max-sm:hidden"
         >
           <SearchIcon />
           <input
             className="w-[341px] h-[36px] rounded-[5px] text-black
-             pl-[10px] text-[14px] inline-block focus:outline-none"
+             pl-[10px] text-[14px] inline-block focus:outline-none
+             max-sm:hidden
+             "
             placeholder="Search.."
             type="search"
             onChange={movieSearch}
@@ -216,7 +238,7 @@ export const Header = () => {
           )}
         </div>
       </div>
-      <button className="cursor-pointer">
+      <button className="cursor-pointer max-sm:hidden">
         <DarkModeIcon />
       </button>
     </div>

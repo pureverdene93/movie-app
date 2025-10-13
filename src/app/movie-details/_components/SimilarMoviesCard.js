@@ -13,7 +13,7 @@ export const SimilarMovieCard = (props) => {
   console.log(movieId);
 
   return (
-    <div className="w-[190px] h-[372px] bg-white rounded-[5px] flex flex-col gap-[8px]">
+    <div className="w-[190px] h-[372px] bg-white rounded-[5px] flex flex-col gap-[8px] hover:bg-zinc-300">
       <Link href={`/movie-details/${movieId}`}>
         <button className="cursor-pointer">
           <img

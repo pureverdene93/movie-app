@@ -72,9 +72,9 @@ export const MovieSectionUpcoming = (props) => {
   // };
 
   return (
-    <div className=" flex flex-col gap-[36px] justify-center items-center">
-      <div className="w-[1275px]">
-        <div className="flex items-center justify-between flex-row">
+    <div className=" flex flex-col gap-[36px] justify-center items-center max-sm:gap-[32px]">
+      <div className="w-[1275px] max-sm:w-[335px]">
+        <div className="flex items-center justify-between flex-row max-sm:w-[335px]">
           <p className="text-black text-[24px] font-semibold">{title}</p>
           <Link href={"/seeMoreUpcoming"}>
             <button className="text-black flex items-center gap-[14px] cursor-pointer">
@@ -83,7 +83,7 @@ export const MovieSectionUpcoming = (props) => {
           </Link>
         </div>
       </div>
-      <div className="flex flex-wrap gap-[32px] justify-center">
+      <div className="flex flex-wrap gap-[32px] justify-center max-sm:gap-[20px] max-sm:w-[375px]">
         {upcomingMovieData.slice(0, 10).map((movie, index) => {
           return (
             <MovieCard

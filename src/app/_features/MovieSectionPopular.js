@@ -63,8 +63,11 @@ export const MovieSectionPopular = (props) => {
     return <div className="text-black text-[100px]">Something wrong Test</div>;
   }
   return (
-    <div className=" flex flex-col gap-[36px] justify-center items-center">
-      <div className="w-[1275px]">
+    <div className=" flex flex-col gap-[36px] justify-center items-center max-sm:gap-[32px]">
+      <div
+        className="w-[1275px]
+      max-sm:w-[335px]"
+      >
         <div className="flex items-center justify-between flex-row">
           <p className="text-black text-[24px] font-semibold">Popular</p>
           <Link href={"/seeMorePopular"}>
@@ -77,7 +80,7 @@ export const MovieSectionPopular = (props) => {
           </Link>
         </div>
       </div>
-      <div className="flex flex-wrap gap-[32px] justify-center">
+      <div className="flex flex-wrap gap-[32px] justify-center max-sm:gap-[20px] max-sm:w-[375px]">
         {popularMovieData.slice(0, 10).map((movie, index) => {
           return (
             <MovieCard

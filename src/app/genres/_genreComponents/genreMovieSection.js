@@ -128,7 +128,7 @@ export const GenreMovieSecton = () => {
                       className="text-black min-w-[64px] h-[20px] text-[12px] 
                 font-semibold flex flex-row border justify-center 
                 items-center cursor-pointer rounded-[20px] gap-[8px] pr-[5px] pl-[10px]
-                border-zinc-500"
+                border-zinc-500 hover:bg-zinc-300"
                     >
                       {genres.name}
                       <GenresIcon />

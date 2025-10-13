@@ -15,7 +15,7 @@ export const GenreMovieCard = (props) => {
   };
 
   return (
-    <div className="w-[165px] h-[331px] bg-white rounded-[5px] flex flex-col gap-[8px]">
+    <div className="w-[165px] h-[331px] bg-white rounded-[5px] flex flex-col gap-[8px] hover:bg-zinc-300">
       <button className="cursor-pointer">
         <img
           src={imageSrc}

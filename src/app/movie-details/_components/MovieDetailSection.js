@@ -181,12 +181,12 @@ export const MovieDetailSection = () => {
         <div className="flex gap-[32px]">
           <img
             src={`https://image.tmdb.org/t/p/original/${movieDetail.poster_path}`}
-            className="w-[290px] h-[428px] object-cover"
+            className="w-[290px] h-[428px] object-cover rounded-[5px]"
           />
           <div className="w-[760px] h-[428px] relative z-[0] flex items-end">
             <img
               src={`https://image.tmdb.org/t/p/original/${movieDetail.backdrop_path}`}
-              className="w-full h-full object-cover absolute z-[-1]"
+              className="w-full h-full object-cover absolute z-[-1] rounded-[5px]"
             />
             <div className="flex ml-[24px] mb-[24px] items-center gap-[5px]">
               <button
@@ -196,7 +196,7 @@ export const MovieDetailSection = () => {
                 <PlayBtn />
               </button>
 
-              <p>Play Trailer </p>
+              <p></p>
             </div>
           </div>
         </div>
