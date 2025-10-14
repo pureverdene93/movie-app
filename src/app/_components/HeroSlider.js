@@ -7,6 +7,8 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { PrevIcon } from "../_icons/PrevIcon";
+import { PlayBtnLight } from "../_icons/PlayBtnLight";
+import { Slice } from "lucide-react";
 
 const ApiLink =
   "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1";
@@ -66,7 +68,11 @@ export const HeroSLider = () => {
   // console.log("This is hero slider data", heroSliderData);
 
   if (loading) {
-    return <div className="w-[1440px] h-[600px] bg-white"></div>;
+    return (
+      <div className="w-[1440px] h-[600px] bg-white animate-spin text-[100px] flex items-center justify-center">
+        Loading hiijiin
+      </div>
+    );
   }
   if (!loading && typeof heroSliderData === "undefined") {
     return (
@@ -97,33 +103,33 @@ export const HeroSLider = () => {
   // console.log(movie);
 
   return (
-    <div className="flex justify-center items-center flex-col relative">
+    <div
+      className="flex justify-center items-center flex-col relative w-[1440px]
+    max-sm:w-[375px] "
+    >
       <div
         className="flex flex-row  overflow-hidden relative w-[1440px]
-      max-sm:w-[375px]"
+      max-sm:w-[375px] max-sm:flex-col"
       >
         <div
           ref={sliderRef}
           className="flex overflow-x-scroll scroll-smooth snap-x snap-mandatory"
-          style={{
-            width: `${heroSliderData.length * 100}%`,
-          }}
         >
           {heroSliderData.map((movie) => {
             return (
               <div
-                className="aspect-[1440/625] w-full relative z-[16] flex items-center justify-between  shrink-0 snap-start
-                max-sm:h-[246px]"
+                className="w-[1440px] aspect-[1440/625] relative z-[16] flex items-center justify-between  shrink-0 snap-start
+                max-sm:w-[375px] max-sm:min-h-[470px] max-sm:flex-col"
                 key={movie.id}
               >
                 <img
                   src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                  className="aspect-[1440/625] object-cover absolute z-[-1] 
-                  max-sm:w-[375px] max-sm:h-[246px]"
+                  className="aspect-[1440/625]  object-cover absolute z-[-1] max-sm:
+                  max-sm:w-[375px] max-sm:h-[246px] max-sm:relative"
                   alt="HeroSlider"
                 />
 
-                <div className="flex flex-row items-center ml-[44px] ">
+                <div className="flex flex-row items-center ml-[44px] max-sm:ml-[0]">
                   {currentSlider > 0 && (
                     <button
                       className="absolute w-[40px] h-[40px] bg-white text-black rounded-[100%] flex items-center justify-center cursor-pointer mr-[44px]"
@@ -132,22 +138,28 @@ export const HeroSLider = () => {
                       <PrevIcon />
                     </button>
                   )}
-                  <div className="ml-[70px] max-sm:hidden">
+                  <div className="ml-[70px] max-sm:ml-0">
                     <div className="flex flex-col ">
-                      <p className="text-[16px] text-white">Now Playing:</p>
-                      <p className="text-[36px] text-white w-[400px]">
+                      <p className="text-[16px] text-white max-sm:text-black max-sm:text-[14px]">
+                        Now Playing:
+                      </p>
+                      <p className="text-[36px] text-white w-[400px] max-sm:text-black max-sm:text-[24px] max-sm:w-[337px]">
                         {movie.title}
                       </p>
-                      <p className="flex items-center gap-[5px] text-white">
+                      <p className="flex items-center gap-[5px] text-white max-sm:text-black">
                         <RatingIcon /> {movie.vote_average.toFixed(1)}
                         <span className="text-zinc-400">/10</span>
                       </p>
                     </div>
                     <div className="flex flex-col gap-[16px] text-[14px]">
-                      <p className="w-[400px] text-white">{movie.overview}</p>
+                      <p className="w-[400px] text-white max-sm:text-black max-sm:w-[337px]">
+                        {movie.overview}
+                      </p>
 
                       <button
-                        className="w-[145px] h-[40px] flex items-center justify-evenly rounded-[5px] bg-white text-black text-[16px] cursor-pointer"
+                        className="w-[145px] h-[40px] flex items-center 
+                        justify-evenly rounded-[5px] bg-white text-black text-[16px] cursor-pointer
+                        max-sm:bg-black max-sm:text-white max-sm:text-[14px]"
                         onClick={() => trailerDisplay(movie.id)}
                       >
                         <PlayBtn /> Watch Trailer
@@ -186,34 +198,6 @@ export const HeroSLider = () => {
           ></iframe>
         </>
       )}
-      {/* <div>
-        {heroSliderData.map((movie) => {
-          return (
-            <div className="ml-[70px] max-sm:hidden">
-              <div className="flex flex-col ">
-                <p className="text-[16px] text-white">Now Playing:</p>
-                <p className="text-[36px] text-white w-[400px]">
-                  {movie.title}
-                </p>
-                <p className="flex items-center gap-[5px] text-white">
-                  <RatingIcon /> {movie.vote_average.toFixed(1)}
-                  <span className="text-zinc-400">/10</span>
-                </p>
-              </div>
-              <div className="flex flex-col gap-[16px] text-[14px]">
-                <p className="w-[400px] text-white">{movie.overview}</p>
-
-                <button
-                  className="w-[145px] h-[40px] flex items-center justify-evenly rounded-[5px] bg-white text-black text-[16px] cursor-pointer"
-                  onClick={() => trailerDisplay(movie.id)}
-                >
-                  <PlayBtn /> Watch Trailer
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div> */}
     </div>
   );
 };
