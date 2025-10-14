@@ -113,18 +113,18 @@ export const HeroSLider = () => {
       >
         <div
           ref={sliderRef}
-          className="flex overflow-x-scroll scroll-smooth snap-x snap-mandatory"
+          className="flex overflow-x-scroll scroll-smooth snap-x snap-mandatory max-sm:h-[500px]"
         >
           {heroSliderData.map((movie) => {
             return (
               <div
                 className="w-[1440px] aspect-[1440/625] relative z-[16] flex items-center justify-between  shrink-0 snap-start
-                max-sm:w-[375px] max-sm:min-h-[470px] max-sm:flex-col"
+                max-sm:w-[375px] max-sm:h-[475px] max-sm:flex-col "
                 key={movie.id}
               >
                 <img
                   src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                  className="aspect-[1440/625]  object-cover absolute z-[-1] max-sm:
+                  className="aspect-[1440/625]  object-cover absolute z-[-1] shrink-0
                   max-sm:w-[375px] max-sm:h-[246px] max-sm:relative"
                   alt="HeroSlider"
                 />
@@ -132,7 +132,8 @@ export const HeroSLider = () => {
                 <div className="flex flex-row items-center ml-[44px] max-sm:ml-[0]">
                   {currentSlider > 0 && (
                     <button
-                      className="absolute w-[40px] h-[40px] bg-white text-black rounded-[100%] flex items-center justify-center cursor-pointer mr-[44px]"
+                      className="absolute w-[40px] h-[40px] bg-white text-black rounded-[100%] flex items-center justify-center cursor-pointer mr-[44px]
+                      max-sm:hidden"
                       onClick={heroSliderPrevButton}
                     >
                       <PrevIcon />
@@ -153,7 +154,9 @@ export const HeroSLider = () => {
                     </div>
                     <div className="flex flex-col gap-[16px] text-[14px]">
                       <p className="w-[400px] text-white max-sm:text-black max-sm:w-[337px]">
-                        {movie.overview}
+                        {String(movie.overview).length > 120
+                          ? String(movie.overview).slice(0, 120) + "..."
+                          : String(movie.overview) || "No overview here"}
                       </p>
 
                       <button
