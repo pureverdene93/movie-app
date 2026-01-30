@@ -3,12 +3,9 @@
 import { RatingIcon } from "../_icons/ratingIcon";
 import { PlayBtn } from "../_icons/playbtn";
 import { NextIcon } from "../_icons/nextIcon";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { PrevIcon } from "../_icons/PrevIcon";
-import { PlayBtnLight } from "../_icons/PlayBtnLight";
-import { Slice } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ApiLink =
   "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1";
@@ -22,16 +19,57 @@ const options = {
   },
 };
 
+const HeroSliderSkeleton = () => {
+  return (
+    <div className="w-full max-w-[1440px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] relative">
+      <Skeleton className="w-full h-full absolute" />
+      <div className="absolute bottom-0 left-0 p-4 sm:p-6 md:p-8 lg:p-[44px] flex flex-col gap-3 md:gap-4">
+        <Skeleton className="w-[80px] sm:w-[100px] h-[16px] sm:h-[20px]" />
+        <Skeleton className="w-[200px] sm:w-[280px] md:w-[350px] h-[28px] sm:h-[36px] md:h-[40px]" />
+        <Skeleton className="w-[100px] sm:w-[120px] h-[20px] sm:h-[24px]" />
+        <Skeleton className="w-[250px] sm:w-[300px] md:w-[400px] h-[50px] sm:h-[60px]" />
+        <Skeleton className="w-[130px] sm:w-[145px] h-[36px] sm:h-[40px]" />
+      </div>
+    </div>
+  );
+};
+
 export const HeroSLider = () => {
   const [heroSliderData, setHeroSliderData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sliderMovieTrailer, setSliderMovieTrailer] = useState(null);
   const [currentSlider, setCurrentSlider] = useState(0);
-  // const [saveInputData, setSaveInputData] = useState("");
-  // const [error, setError] = useState(null);
+  const [slideWidth, setSlideWidth] = useState(0);
 
   const sliderRef = useRef(null);
-  const slideWidth = 1440;
+
+  useEffect(() => {
+    const updateSlideWidth = () => {
+      if (sliderRef.current) {
+        setSlideWidth(sliderRef.current.offsetWidth);
+      }
+    };
+    updateSlideWidth();
+    window.addEventListener("resize", updateSlideWidth);
+    return () => window.removeEventListener("resize", updateSlideWidth);
+  }, []);
+
+  // Sync currentSlider with actual scroll position
+  const handleScroll = useCallback(() => {
+    if (sliderRef.current && slideWidth > 0) {
+      const scrollLeft = sliderRef.current.scrollLeft;
+      const newIndex = Math.round(scrollLeft / slideWidth);
+      setCurrentSlider(newIndex);
+    }
+  }, [slideWidth]);
+
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (slider) {
+      slider.addEventListener("scroll", handleScroll);
+      return () => slider.removeEventListener("scroll", handleScroll);
+    }
+  }, [handleScroll]);
 
   const getData = async () => {
     setLoading(true);
@@ -40,43 +78,54 @@ export const HeroSLider = () => {
     setHeroSliderData(jsonData.results);
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 500);
   };
+
   useEffect(() => {
     getData();
   }, []);
 
   const heroSliderNextButton = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: slideWidth, behavior: "smooth" });
-      setCurrentSlider((prev) => prev + 1);
+    if (sliderRef.current && currentSlider < heroSliderData.length - 1) {
+      const newIndex = currentSlider + 1;
+      sliderRef.current.scrollTo({
+        left: slideWidth * newIndex,
+        behavior: "smooth",
+      });
+      setCurrentSlider(newIndex);
     }
     setSliderMovieTrailer(null);
   };
 
   const heroSliderPrevButton = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({
-        left: -slideWidth,
+    if (sliderRef.current && currentSlider > 0) {
+      const newIndex = currentSlider - 1;
+      sliderRef.current.scrollTo({
+        left: slideWidth * newIndex,
         behavior: "smooth",
       });
-      setCurrentSlider((prev) => prev - 1);
+      setCurrentSlider(newIndex);
     }
     setSliderMovieTrailer(null);
   };
 
-  // console.log("This is hero slider data", heroSliderData);
+  const goToSlide = (index) => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({
+        left: slideWidth * index,
+        behavior: "smooth",
+      });
+      setCurrentSlider(index);
+    }
+  };
 
   if (loading) {
-    return (
-      <div className="w-[1440px] h-[600px] bg-white animate-spin text-[100px] flex items-center justify-center">
-        Loading hiijiin
-      </div>
-    );
+    return <HeroSliderSkeleton />;
   }
+
   if (!loading && typeof heroSliderData === "undefined") {
     return (
-      <div className="text-black text-[100px]">...something wrong test</div>
+      <div className="text-foreground text-[24px]">Something went wrong</div>
     );
   }
 
@@ -94,112 +143,122 @@ export const HeroSLider = () => {
     } else {
       setSliderMovieTrailer(null);
     }
-    // console.log(youtubeTrailer);
   };
 
-  console.log("this is slider movie trailer", sliderMovieTrailer);
-
-  // const movie = heroSliderData(heroSliderNext);
-  // console.log(movie);
-
   return (
-    <div
-      className="flex justify-center items-center flex-col relative w-[1440px]
-    max-sm:w-[375px] "
-    >
-      <div
-        className="flex flex-row  overflow-hidden relative w-[1440px]
-      max-sm:w-[375px] max-sm:flex-col"
-      >
+    <div className="flex justify-center items-center flex-col relative w-full max-w-[1440px]">
+      <div className="relative w-full">
+        {/* Navigation Buttons - Positioned outside slider */}
+        {currentSlider > 0 && (
+          <button
+            className="absolute left-2 sm:left-4 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-background/90 text-foreground rounded-full flex items-center justify-center cursor-pointer hover:bg-accent transition-colors shadow-lg"
+            onClick={heroSliderPrevButton}
+            aria-label="Previous slide"
+          >
+            <PrevIcon />
+          </button>
+        )}
+
+        {currentSlider < heroSliderData.length - 1 && (
+          <button
+            className="absolute right-2 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-background/90 text-foreground rounded-full flex items-center justify-center cursor-pointer hover:bg-accent transition-colors shadow-lg"
+            onClick={heroSliderNextButton}
+            aria-label="Next slide"
+          >
+            <NextIcon />
+          </button>
+        )}
+
+        {/* Slider Container */}
         <div
           ref={sliderRef}
-          className="flex overflow-x-scroll scroll-smooth snap-x snap-mandatory max-sm:h-[500px]"
+          className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory w-full"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
         >
           {heroSliderData.map((movie) => {
             return (
               <div
-                className="w-[1440px] aspect-[1440/625] relative z-[16] flex items-center justify-between  shrink-0 snap-start
-                max-sm:w-[375px] max-sm:h-[475px] max-sm:flex-col "
+                className="w-full min-w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] relative flex items-end shrink-0 snap-start"
                 key={movie.id}
               >
                 <img
                   src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                  className="aspect-[1440/625]  object-cover absolute z-[-1] shrink-0
-                  max-sm:w-[375px] max-sm:h-[246px] max-sm:relative"
-                  alt="HeroSlider"
+                  className="w-full h-full object-cover absolute inset-0"
+                  alt={movie.title}
                 />
+                {/* Gradient overlay for better text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
 
-                <div className="flex flex-row items-center ml-[44px] max-sm:ml-[0]">
-                  {currentSlider > 0 && (
-                    <button
-                      className="absolute w-[40px] h-[40px] bg-white text-black rounded-[100%] flex items-center justify-center cursor-pointer mr-[44px]
-                      max-sm:hidden"
-                      onClick={heroSliderPrevButton}
-                    >
-                      <PrevIcon />
-                    </button>
-                  )}
-                  <div className="ml-[70px] max-sm:ml-0">
-                    <div className="flex flex-col ">
-                      <p className="text-[16px] text-white max-sm:text-black max-sm:text-[14px]">
-                        Now Playing:
-                      </p>
-                      <p className="text-[36px] text-white w-[400px] max-sm:text-black max-sm:text-[24px] max-sm:w-[337px]">
-                        {movie.title}
-                      </p>
-                      <p className="flex items-center gap-[5px] text-white max-sm:text-black">
-                        <RatingIcon /> {movie.vote_average.toFixed(1)}
-                        <span className="text-zinc-400">/10</span>
-                      </p>
-                    </div>
-                    <div className="flex flex-col gap-[16px] text-[14px]">
-                      <p className="w-[400px] text-white max-sm:text-black max-sm:w-[337px]">
-                        {String(movie.overview).length > 120
-                          ? String(movie.overview).slice(0, 120) + "..."
-                          : String(movie.overview) || "No overview here"}
-                      </p>
-
-                      <button
-                        className="w-[145px] h-[40px] flex items-center 
-                        justify-evenly rounded-[5px] bg-white text-black text-[16px] cursor-pointer
-                        max-sm:bg-black max-sm:text-white max-sm:text-[14px]"
-                        onClick={() => trailerDisplay(movie.id)}
-                      >
-                        <PlayBtn /> Watch Trailer
-                      </button>
-                    </div>
+                {/* Content */}
+                <div className="relative z-10 p-4 sm:p-6 md:p-8 lg:p-10 w-full max-w-[600px]">
+                  <p className="text-xs sm:text-sm md:text-base text-white/80 mb-1 sm:mb-2">
+                    Now Playing:
+                  </p>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white font-bold mb-2 sm:mb-3 line-clamp-2">
+                    {movie.title}
+                  </h2>
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-white mb-3 sm:mb-4">
+                    <RatingIcon />
+                    <span className="text-sm sm:text-base font-medium">
+                      {movie.vote_average.toFixed(1)}
+                    </span>
+                    <span className="text-white/60 text-xs sm:text-sm">/10</span>
                   </div>
+                  <p className="text-white/80 text-xs sm:text-sm md:text-base line-clamp-2 sm:line-clamp-3 mb-4 sm:mb-5">
+                    {movie.overview || "No overview available"}
+                  </p>
+                  <button
+                    className="flex items-center justify-center gap-2 sm:gap-2.5 px-4 sm:px-5 py-2 sm:py-2.5 bg-white text-black rounded-md text-sm sm:text-base font-medium cursor-pointer hover:bg-white/90 transition-colors"
+                    onClick={() => trailerDisplay(movie.id)}
+                  >
+                    <PlayBtn />
+                    <span>Watch Trailer</span>
+                  </button>
                 </div>
-
-                <button
-                  className="w-[40px] h-[40px] bg-white text-black rounded-[100%] flex items-center justify-center cursor-pointer mr-[44px]
-                  max-sm:hidden"
-                  onClick={heroSliderNextButton}
-                >
-                  <NextIcon />
-                </button>
               </div>
             );
           })}
         </div>
       </div>
+
+      {/* Slider Indicators */}
+      <div className="flex gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+        {heroSliderData.slice(0, 10).map((_, index) => (
+          <button
+            key={index}
+            className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 ${
+              currentSlider === index
+                ? "bg-primary w-4 sm:w-6"
+                : "bg-muted hover:bg-muted-foreground"
+            }`}
+            onClick={() => goToSlide(index)}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Trailer Modal - No aspect-ratio */}
       {sliderMovieTrailer && (
-        <>
-          {/* <button
-            className="text-white text-[20px]"
-            onClick={() => setSliderMovieTrailer(null)}
-          >
-            X
-          </button> */}
-          <iframe
-            className="youtubeTrailer"
-            src={`https://www.youtube.com/embed/${sliderMovieTrailer}`}
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        </>
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
+          <div className="relative w-full max-w-[900px]">
+            <button
+              onClick={() => setSliderMovieTrailer(null)}
+              className="absolute -top-10 sm:-top-12 right-0 text-white cursor-pointer text-xl sm:text-2xl hover:opacity-70 transition-opacity"
+              aria-label="Close trailer"
+            >
+              ✕
+            </button>
+            <iframe
+              className="w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] rounded-lg"
+              src={`https://www.youtube.com/embed/${sliderMovieTrailer}?autoplay=1`}
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
       )}
     </div>
   );

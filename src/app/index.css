@@ -1,30 +1,57 @@
 .back {
-  background-color: #f4f4f5;
+  background-color: var(--background);
   border-radius: 10px;
-  width: 1440px;
+  width: 100%;
+  max-width: 1440px;
   display: flex;
   align-items: center;
   flex-direction: column;
   position: relative;
-  /* z-index: 101; */
 }
 .youtubeTrailer {
-  width: 997px;
-  height: 561px;
+  width: 100%;
+  max-width: 997px;
+  height: 300px;
   position: absolute;
   top: 100px;
   z-index: 20;
 }
 .youtubeTrailerDetails {
-  width: 997px;
-  height: 561px;
+  width: 100%;
+  max-width: 997px;
+  height: 300px;
   position: absolute;
   top: 160px;
   z-index: 20;
   margin-left: 40px;
 }
+
+@media only screen and (min-width: 640px) {
+  .youtubeTrailer,
+  .youtubeTrailerDetails {
+    height: 400px;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .youtubeTrailer,
+  .youtubeTrailerDetails {
+    height: 500px;
+  }
+}
+
+/* Tablet breakpoint */
+@media only screen and (max-width: 1024px) {
+  .youtubeTrailerDetails {
+    margin-left: 20px;
+  }
+}
+
+/* Mobile breakpoint */
 @media only screen and (max-width: 640px) {
-  .back {
-    width: 375px;
+  .youtubeTrailer,
+  .youtubeTrailerDetails {
+    margin-left: 0;
+    top: 80px;
   }
 }

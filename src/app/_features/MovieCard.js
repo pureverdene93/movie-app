@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 export const MovieCard = (props) => {
   const { title, rating, imageSrc, upcomingMovieId } = props;
 
-  // console.log("upcoming movie id", upcomingMovieId);
-
   const router = useRouter();
 
   const handleMovieDetail = () => {
@@ -15,26 +13,22 @@ export const MovieCard = (props) => {
 
   return (
     <div
-      className="w-[230px] h-[439px] bg-white rounded-[5px] flex flex-col gap-[8px]  hover:bg-zinc-300
-    max-sm:w-[157px] max-sm:h-[309px] max-sm:gap-[2px]"
+      className="w-[150px] sm:w-[180px] md:w-[200px] lg:w-[230px] h-auto bg-card rounded-md flex flex-col gap-1 sm:gap-2 hover:bg-accent transition-colors cursor-pointer"
+      onClick={handleMovieDetail}
     >
-      <button className="cursor-pointer">
-        <img
-          src={imageSrc}
-          alt="Image Not Found"
-          className="object-cover w-[230px] h-[340px] rounded-[5px]
-          max-sm:w-[157px] max-sm:h-[233px]"
-          onClick={handleMovieDetail}
-        />
-      </button>
-      <div className="ml-[8px] flex flex-col gap-[5px] max-sm:gap-[1px]">
-        <p className="flex text-[14px] text-black items-center">
-          <span className="mr-[5px]">
+      <img
+        src={imageSrc}
+        alt={title}
+        className="object-cover w-full aspect-[2/3] rounded-md"
+      />
+      <div className="px-2 pb-2 flex flex-col gap-1">
+        <p className="flex text-xs sm:text-sm text-foreground items-center">
+          <span className="mr-1">
             <RatingIconSmall />
           </span>
-          10 <span className="text-zinc-400 text-[13px] ">/{rating}</span>
+          {rating}<span className="text-muted-foreground text-xs">/10</span>
         </p>
-        <p className="text-black text-[16px] font-[350] max-sm:text-[13px] max-sm:font-[400]">
+        <p className="text-foreground text-sm sm:text-base font-normal line-clamp-2">
           {title}
         </p>
       </div>

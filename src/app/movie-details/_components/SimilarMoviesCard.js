@@ -5,33 +5,24 @@ import Link from "next/link";
 export const SimilarMovieCard = (props) => {
   const { imageSrc, rating, title, movieId } = props;
 
-  // const router = useRouter();
-  // const pushSimilarMovieCard = () => {
-  //   router.push(`movie-details/${movieId}`);
-  //   router.refresh();
-  // };
-  console.log(movieId);
-
   return (
-    <div className="w-[190px] h-[372px] bg-white rounded-[5px] flex flex-col gap-[8px] hover:bg-zinc-300">
-      <Link href={`/movie-details/${movieId}`}>
-        <button className="cursor-pointer">
-          <img
-            src={imageSrc}
-            alt="Image Not Found"
-            className="object-cover w-full h-[281px] rounded-[5px]"
-          />
-        </button>
-      </Link>
-      <div className="ml-[8px] flex flex-col gap-[5px]">
-        <p className="flex text-[14px] text-black items-center">
-          <span className="mr-[5px]">
-            <RatingIconSmall />
-          </span>
-          10 <span className="text-zinc-400 text-[13px] ">/{rating}</span>
-        </p>
-        <p className="text-black text-[14px] font-[350] ">{title}</p>
+    <Link href={`/movie-details/${movieId}`} className="block">
+      <div className="w-full h-auto bg-card rounded-md flex flex-col gap-1 sm:gap-2 hover:bg-accent transition-colors cursor-pointer">
+        <img
+          src={imageSrc}
+          alt={title}
+          className="object-cover w-full aspect-[2/3] rounded-md"
+        />
+        <div className="px-2 pb-2 flex flex-col gap-1">
+          <p className="flex text-xs sm:text-sm text-foreground items-center">
+            <span className="mr-1">
+              <RatingIconSmall />
+            </span>
+            {rating}<span className="text-muted-foreground text-xs">/10</span>
+          </p>
+          <p className="text-foreground text-sm sm:text-base font-normal line-clamp-2">{title}</p>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };

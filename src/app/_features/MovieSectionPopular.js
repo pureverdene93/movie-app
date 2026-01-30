@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Link from "next/link";
 import { SeeMore } from "../_icons/SeeMoreIcon";
+import { MovieSectionSkeleton } from "@/components/ui/MovieCardSkeleton";
 
 const ApiLink =
   "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1";
@@ -25,62 +26,37 @@ export const MovieSectionPopular = (props) => {
     setLoading(true);
     const data = await fetch(ApiLink, options);
     const jsonData = await data.json();
-    // console.log(jsonData);
     setPopularMovieData(jsonData.results);
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 500);
   };
 
   useEffect(() => {
     getData();
   }, []);
-  // console.log(popularMovieData);
-  // console.log(popularMovieData, "asdosaodoasmdksandksakis");
+
   if (loading) {
-    return (
-      <div className="flex flex-col gap-[36px] items-center">
-        <div className=" w-[1275px] flex items-center justify-between ">
-          <div className="w-[250px] h-[32px] bg-white rounded-[5px]"></div>
-          <div className="w-[165px] h-[32px] bg-white rounded-[5px]"></div>
-        </div>
-        <div className="w-[1440px] flex flex-wrap gap-[32px] justify-center">
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-        </div>
-      </div>
-    );
+    return <MovieSectionSkeleton showSeeMore={true} />;
   }
+
   if (!loading && typeof popularMovieData === "undefined") {
-    return <div className="text-black text-[100px]">Something wrong Test</div>;
+    return <div className="text-foreground text-[24px]">Something went wrong</div>;
   }
+
   return (
-    <div className=" flex flex-col gap-[36px] justify-center items-center max-sm:gap-[32px]">
-      <div
-        className="w-[1275px]
-      max-sm:w-[335px]"
-      >
+    <div className="flex flex-col gap-6 sm:gap-8 lg:gap-9 justify-center items-center w-full px-4 sm:px-6 lg:px-0">
+      <div className="w-full max-w-[1275px]">
         <div className="flex items-center justify-between flex-row">
-          <p className="text-black text-[24px] font-semibold">Popular</p>
+          <p className="text-foreground text-lg sm:text-xl lg:text-2xl font-semibold">Popular</p>
           <Link href={"/seeMorePopular"}>
-            <button
-              className="text-black flex items-center gap-[14px] cursor-pointer"
-              // onClick={seeMore}
-            >
+            <button className="text-foreground flex items-center gap-2 sm:gap-3 cursor-pointer hover:opacity-70 transition-opacity text-sm sm:text-base">
               See more <SeeMore />
             </button>
           </Link>
         </div>
       </div>
-      <div className="flex flex-wrap gap-[32px] justify-center max-sm:gap-[20px] max-sm:w-[375px]">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-6 w-full max-w-[1275px]">
         {popularMovieData.slice(0, 10).map((movie, index) => {
           return (
             <MovieCard

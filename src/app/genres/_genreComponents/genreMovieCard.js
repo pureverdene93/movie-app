@@ -1,12 +1,9 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { RatingIconSmall } from "@/app/_icons/RatingIconSmall";
 import { SmallestRatingIcon } from "../_icons/smallestRatingIcon";
 
 export const GenreMovieCard = (props) => {
   const { title, rating, imageSrc, upcomingMovieId } = props;
-
-  // console.log("upcoming movie id", upcomingMovieId);
 
   const router = useRouter();
 
@@ -15,23 +12,23 @@ export const GenreMovieCard = (props) => {
   };
 
   return (
-    <div className="w-[165px] h-[331px] bg-white rounded-[5px] flex flex-col gap-[8px] hover:bg-zinc-300">
-      <button className="cursor-pointer">
-        <img
-          src={imageSrc}
-          alt="Image Not Found"
-          className="object-cover w-[165px] h-[244px] rounded-[5px]"
-          onClick={handleMovieDetail}
-        />
-      </button>
-      <div className="ml-[8px] flex flex-col gap-[5px]">
-        <p className="flex text-[14px] text-black items-center">
-          <span className="mr-[5px]">
+    <div
+      className="w-full h-auto bg-card rounded-md flex flex-col gap-1 sm:gap-2 hover:bg-accent transition-colors cursor-pointer"
+      onClick={handleMovieDetail}
+    >
+      <img
+        src={imageSrc}
+        alt={title}
+        className="object-cover w-full aspect-[2/3] rounded-md"
+      />
+      <div className="px-2 pb-2 flex flex-col gap-1">
+        <p className="flex text-xs sm:text-sm text-foreground items-center">
+          <span className="mr-1">
             <SmallestRatingIcon />
           </span>
-          10 <span className="text-zinc-400 text-[13px] ">/{rating}</span>
+          {rating}<span className="text-muted-foreground text-xs">/10</span>
         </p>
-        <p className="text-black text-[14px] font-[350] ">{title}</p>
+        <p className="text-foreground text-sm sm:text-base font-normal line-clamp-2">{title}</p>
       </div>
     </div>
   );

@@ -2,11 +2,8 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MovieCard } from "@/app/_features/MovieCard";
-import { MovieType } from "@/app/_features/MovieType";
-import { NextNotWorkingIcon } from "@/app/_icons/NextNotWorking";
-import { Next } from "@/app/seeMoreUpcoming/_icons/Next";
-import { PrevNotWorkingIcon } from "@/app/_icons/prevNotWorkingIcon";
-import { PrevIcon } from "@/app/_icons/PrevIcon";
+import { PaginatedMovieSkeleton } from "@/components/ui/MovieCardSkeleton";
+import { Pagination } from "@/components/ui/Pagination";
 
 const options = {
   method: "GET",
@@ -20,141 +17,71 @@ const options = {
 export const MoreLikeThisSection = () => {
   const param = useParams();
   const { id } = param;
-  console.log(id);
 
   const [similarData, setSimilarData] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(false);
-
-  const similarMovieApiLink = `https://api.themoviedb.org/3/movie/${id}/similar?language=en-US&page=${page}`;
+  const [loading, setLoading] = useState(true);
 
   const getData = async () => {
     setLoading(true);
+    const similarMovieApiLink = `https://api.themoviedb.org/3/movie/${id}/similar?language=en-US&page=${page}`;
     const data = await fetch(similarMovieApiLink, options);
     const jsonData = await data.json();
-    setSimilarData(jsonData.results);
-    setTotalPages(jsonData.total_pages);
+    setSimilarData(jsonData.results || []);
+    setTotalPages(Math.min(jsonData.total_pages || 1, 500));
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
-    console.log(jsonData.results);
+    }, 500);
   };
 
   useEffect(() => {
     getData();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id, page]);
 
-  const nextPage = () => {
-    setPage(page + 1);
-  };
-  const prePage = () => {
-    if (page === 1) {
-      setPage(page);
-    }
-    if (page > 1) {
-      setPage(page - 1);
-    }
-    if (page === totalPages) {
-      setPage(page);
-    }
-  };
-  const pageNum = (num) => {
-    setPage(num);
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
   };
 
   if (loading) {
-    return (
-      <div className="flex flex-col gap-[36px] items-center">
-        <div className=" w-[1275px] flex items-center justify-start ">
-          <div className="w-[250px] h-[32px] bg-white rounded-[5px]"></div>
-        </div>
-        <div className="w-[1440px] flex flex-wrap gap-[32px] justify-center">
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-          <div className="w-[230px] h-[439px] rounded-[5px] bg-white"></div>
-        </div>
-        <div className="w-[1275px] flex items-end justify-end gap-[100px]">
-          <div className="w-[114px] h-[24px] bg-white rounded-[5px]"></div>
-          <div className="w-[88px] h-[24px] bg-white rounded-[5px]"></div>
-        </div>
-      </div>
-    );
+    return <PaginatedMovieSkeleton />;
   }
 
   if (!loading && typeof similarData === "undefined") {
-    return <div className="text-[100px]">Something went wrong test</div>;
+    return <div className="text-foreground text-2xl">Something went wrong</div>;
   }
+
   return (
-    <div className="w-[1280px] flex gap-[32px] flex-col">
-      <MovieType title={"More like this"} />
-      <div className="flex flex-wrap justify-between w-full  gap-[32px]">
+    <div className="flex flex-col gap-6 sm:gap-8 lg:gap-9 justify-center items-center w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
+      <div className="w-full max-w-[1275px]">
+        <div className="flex items-center justify-between flex-row">
+          <p className="text-foreground text-lg sm:text-xl lg:text-2xl font-semibold">More like this</p>
+          <p className="text-muted-foreground text-xs sm:text-sm">
+            Page {page} of {totalPages}
+          </p>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5 lg:gap-6 w-full max-w-[1275px]">
         {similarData.map((movie) => {
           return (
-            <div key={movie.id}>
-              <MovieCard
-                title={movie.title}
-                rating={movie.vote_average.toFixed(1)}
-                imageSrc={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-                upcomingMovieId={movie.id}
-              />
-            </div>
+            <MovieCard
+              key={movie.id}
+              title={movie.title}
+              rating={movie.vote_average.toFixed(1)}
+              imageSrc={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+              upcomingMovieId={movie.id}
+            />
           );
         })}
       </div>
-      <div className="flex flex-row items-center justify-end">
-        <button
-          className={`w-[114px] [h-40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] ${
-            page === 1 ? "text-zinc-300" : "text-black"
-          }`}
-          onClick={prePage}
-        >
-          {page === 1 ? <PrevNotWorkingIcon /> : <PrevIcon />}
-          Previous
-        </button>
-        <div className="flex flex-row gap-[5px]">
-          {Array.from({ length: 4 }, (_, i) => {
-            const num = i + 1;
-
-            return (
-              <button
-                key={num}
-                onClick={() => pageNum(num)}
-                className={`px-3 py-1 cursor-pointer rounded-md ${
-                  page === num ? "bg-black text-white" : "text-black border"
-                }`}
-              >
-                {num}
-              </button>
-            );
-          })}
-        </div>
-        <button
-          className={`w-[88px] h-[40px] text-[16px] flex items-center justify-center cursor-pointer gap-[2px] ${
-            page === 4 ? "text-zinc-300" : "text-black"
-          }`}
-          onClick={nextPage}
-        >
-          Next
-          {page === 4 ? <NextNotWorkingIcon /> : <Next />}
-        </button>
+      <div className="w-full max-w-[1275px]">
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          maxVisiblePages={5}
+        />
       </div>
     </div>
   );
