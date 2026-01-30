@@ -7,10 +7,8 @@ import { MoreLikeThisSection } from "../_similarMoviesComponents/moreLikeThisSec
 export default function Home() {
   return (
     <div className="back">
-      <div className="flex flex-col gap-[56px] mb-[76px] items-center">
-        <Header />
-        <MoreLikeThisSection />
-      </div>
+      <Header />
+      <MoreLikeThisSection />
       <Footer />
     </div>
   );

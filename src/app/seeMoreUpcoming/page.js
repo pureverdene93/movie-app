@@ -24,14 +24,10 @@ export default function Home() {
   //   getData();
   // }, []);
   return (
-    <>
-      <div className="back">
-        <div className="flex flex-col gap-[52px] items-center">
-          <Header />
-          <UpcomingMovieSection />
-          <Footer />
-        </div>
-      </div>
-    </>
+    <div className="back">
+      <Header />
+      <UpcomingMovieSection />
+      <Footer />
+    </div>
   );
 }

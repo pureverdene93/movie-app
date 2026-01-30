@@ -13,7 +13,7 @@ export const MovieCard = (props) => {
 
   return (
     <div
-      className="w-[150px] sm:w-[180px] md:w-[200px] lg:w-[230px] h-auto bg-card rounded-md flex flex-col gap-1 sm:gap-2 hover:bg-accent transition-colors cursor-pointer"
+      className="w-full h-auto bg-card rounded-md flex flex-col gap-1 sm:gap-2 hover:bg-accent transition-colors cursor-pointer"
       onClick={handleMovieDetail}
     >
       <img
