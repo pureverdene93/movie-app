@@ -9,7 +9,8 @@ export const NextIcon = () => {
     >
       <path
         d="M6 12L10 8L6 4"
-        stroke="#18181B"
+        stroke="currentColor"
+        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

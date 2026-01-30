@@ -148,26 +148,28 @@ export const HeroSLider = () => {
   return (
     <div className="flex justify-center items-center flex-col relative w-full max-w-[1440px]">
       <div className="relative w-full">
-        {/* Navigation Buttons - Positioned outside slider */}
-        {currentSlider > 0 && (
-          <button
-            className="absolute left-2 sm:left-4 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-background/90 text-foreground rounded-full flex items-center justify-center cursor-pointer hover:bg-accent transition-colors shadow-lg"
-            onClick={heroSliderPrevButton}
-            aria-label="Previous slide"
-          >
-            <PrevIcon />
-          </button>
-        )}
+        {/* Navigation Buttons - Always visible */}
+        <button
+          className={`absolute left-2 sm:left-4 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/90 dark:bg-white text-black rounded-full flex items-center justify-center cursor-pointer hover:bg-white transition-all shadow-lg ${
+            currentSlider === 0 ? "opacity-0 pointer-events-none" : "opacity-100"
+          }`}
+          onClick={heroSliderPrevButton}
+          disabled={currentSlider === 0}
+          aria-label="Previous slide"
+        >
+          <PrevIcon />
+        </button>
 
-        {currentSlider < heroSliderData.length - 1 && (
-          <button
-            className="absolute right-2 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-background/90 text-foreground rounded-full flex items-center justify-center cursor-pointer hover:bg-accent transition-colors shadow-lg"
-            onClick={heroSliderNextButton}
-            aria-label="Next slide"
-          >
-            <NextIcon />
-          </button>
-        )}
+        <button
+          className={`absolute right-2 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 bg-white/90 dark:bg-white text-black rounded-full flex items-center justify-center cursor-pointer hover:bg-white transition-all shadow-lg ${
+            currentSlider >= heroSliderData.length - 1 ? "opacity-0 pointer-events-none" : "opacity-100"
+          }`}
+          onClick={heroSliderNextButton}
+          disabled={currentSlider >= heroSliderData.length - 1}
+          aria-label="Next slide"
+        >
+          <NextIcon />
+        </button>
 
         {/* Slider Container */}
         <div
